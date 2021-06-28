@@ -39,4 +39,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function scopeWhereName($query, $name)
+    {
+        return $query
+            ->where('first_name', 'like', "%{$name}%")
+            ->orWhere('last_name', 'like', "%{$name}%");
+    }
+
+    public function scopeGetPage($query, $page, $itemsPerPage)
+    {
+        $usersToSkip = $itemsPerPage * ($page - 1);
+        return $query->skip($usersToSkip)->take($itemsPerPage);
+    }
 }
